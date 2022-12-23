@@ -1,38 +1,110 @@
-.App {
-  text-align: center;
+:root{
+  --ff--words:'Open Sans', sans-serif;
+  --ff--heading: 'Oswald', sans-serif;
+  --bg--main:#f5f3de;
+  --bg--sub:#6e4117;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+*,*::before,*::after{
+  box-sizing: border-box;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+body{
+  margin: 0;
+  min-height: 100vh;
+  /* background-color: red; */
+  font-family: var(--ff--words);
 }
-
-.App-header {
-  background-color: #282c34;
+input{
+  border-radius: 0 !important;
+}
+.App{
+  background-color: var(--bg--main);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+
+}
+.App .btn {
+  border-radius: 0;
+  background-color: var(--bg--sub);
+  border: none;
+  transition: all 300ms ease-in;
+}
+.App .btn:hover{
+  background-color: #fff;
+  color: var(--bg--sub);
+  outline: 1px solid var(--bg--sub);
+}
+#root h1{
+  font-family: var(--ff--heading);
+  font-weight: bold;
+  font-size: 3.5rem;
+  text-align: start;
+  margin-top: 0.7em;
+  margin-bottom: 0.5em;
 }
 
-.App-link {
-  color: #61dafb;
+/* login css */
+.login-container,.sign-up-container  {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   padding: 2em 0;
+}
+.login-container form,.sign-up-container form{
+  width: min(100%,500px);
+}
+.login-container h3,.sign-up-container h3{
+  font-size: 2rem;
+  font-family:var(--ff--heading);
+  font-weight: 600;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* slider css */
+.slider-full{
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.carousel-indicators{
+  visibility: hidden !important;
+}
+.carousel-item{
+  height: 350px;
+}
+.carousel-control-next, .carousel-control-prev{
+  display: none !important;
+}
+.App .carousel-caption {
+  bottom: 7rem !important;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 500px;
+  left: 506px !important;
+}
+.carousel-caption h2{
+  color: #000;
+  font-size: 3rem;
+  font-family: var(--ff--heading);
+  font-weight: 600;
+  text-align: start;
+  line-height: 1.4;
+  margin-bottom: 0.4em;
+}
+.carousel-caption button{
+  padding: 0.5em 2em;
+  text-transform: uppercase;
+  font-family:var(--ff--words);
+  font-weight: 600;
+}
+
+/* FOOTER css */
+footer{
+  margin-top: auto;
+  background-color: var(--bg--sub);
+  color:#fff;
+  padding: 20px 20px;
+}
+footer p{
+  margin: 0;
 }

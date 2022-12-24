@@ -60,6 +60,12 @@ input{
   font-weight: 600;
 }
 
+.alert{
+  border-radius: 0 !important;
+  border-left: 3px solid #6e4117 !important;
+  margin-top: 0.8em;
+}
+
 /* slider css */
 .slider-full{
   padding: 0 !important;
@@ -98,6 +104,23 @@ input{
   font-weight: 600;
 }
 
+/* 404 error */
+.App .error{
+  gap:1em;
+}
+.App .error h3{
+  font-size: 5rem;
+  font-family: var(--ff--heading);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.App .error p{
+  font-size: 1.5rem;
+  font-family: var(--ff--words);
+}
+.App .error  a{
+  color: #fff;
+}
 /* FOOTER css */
 footer{
   margin-top: auto;

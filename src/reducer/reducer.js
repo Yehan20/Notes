@@ -1,18 +1,30 @@
 export const reducer=(state,action)=>{
-    // console.log(action);
-    console.log(state.users)
-    if(action.type==='ADD-USER'){
-      const newUsers=[...state.users,action.payload]
+    console.log(action);
+    console.log('initial',state)
+    // if()
+    if(action.type==='FEILDS-EMPTY'){
+        console.log('Empty');
+        return {
+          ...state,errorMsg:'Fill all Feilds',color:'warning'
+        }
+      }
 
+  
+    if(action.type==='FALSE-LOGIN'){
+      console.log('flase login')
       return {
-        ...state,users:newUsers
+        ...state,errorMsg:'Login Incorrect',color:'danger',empty:false
       }
     }
-    return state
+
+   throw new Error('Action not macthed')
 }
 
 export const defaultState={
     email:'',
     password:'',
-    users:[]
+    errorMsg:'',
+    color:'',
+    empty:true
+    
 }

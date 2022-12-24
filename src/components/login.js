@@ -1,36 +1,58 @@
-import React, { useReducer, useRef } from "react";
-import { Form,  FormGroup, Button, Container } from 'react-bootstrap'
-import {reducer,defaultState} from '../reducer/reducer'
-import  Slider from '../components/slider'
-import {Link} from 'react-router-dom'
+import React, { useReducer, useRef, useEffect } from "react";
+import { Form, FormGroup, Button, Container, Alert } from 'react-bootstrap'
+import { reducer, defaultState } from '../reducer/reducer'
+import Slider from '../components/slider'
+import { Link, useNavigate } from 'react-router-dom'
+import { useGlobalContext } from "../contexts/AuthContext";
+import { auth as Auth } from '../firebase'
 const Login = () => {
+
+    useEffect(() => {
+        changeHeading('')
+    }, [])
+
+    const navigate = useNavigate();
+
+
     const emailRef = useRef();
     const passwordRef = useRef()
+    const { changeHeading, login } = useGlobalContext()
+    const [state, dispatch] = useReducer(reducer, defaultState)
 
-    // const defaultState={
-    //     email:'',
-    //     password:'',
-    //     users:[]
-    // }
-
-  
-
-    const handleSubmit=(e)=>{
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const user={
-           email: emailRef.current.value,
-           password:passwordRef.current.value
+        const user = {
+            email: emailRef.current.value,
+            password: passwordRef.current.value
         }
-        console.log(user)
-        dispatch({type:'ADD-USER',payload:user})
+
+        if (user.email === '' || user.password === '') {
+            dispatch({ type: 'FEILDS-EMPTY', payload: user })
+            return
+        }
+
+
+        try {
+            console.log(state.email)
+            await login(Auth, user.email, user.password)
+            navigate('/user-home')
+
+        }
+        catch (error) {
+            dispatch({ type: 'FALSE-LOGIN', payload: 'Error' })
+        }
+
+
     }
-    const[state,dispatch]=useReducer(reducer,defaultState)
+
     return (
         <>
             <Slider />
             <Container>
                 <div className="login-container">
-                    <h3>Login  </h3>
+                    <h3>Login  {String(state.empty)}</h3>
+                    {state.errorMsg && <Alert className="w-100" style={{ maxWidth: '500px' }} variant={state.color}>{state.errorMsg}</Alert>}
+
                     <Form className="login-form" onSubmit={handleSubmit}>
                         <FormGroup>
                             <Form.Label>Email address</Form.Label>
@@ -43,13 +65,6 @@ const Login = () => {
                         <Button varient='info' type="submit" className="d-block">Login</Button>
                     </Form>
                     <Link to='/sign-up' className='text-dark' title="Click to visit">Not a user ?click here </Link>
-                    <div>
-                        {
-                          state.users && state.users.map((user,index)=>{
-                            
-                            return <p key={index}>{user.email}</p>
-                        })}
-                    </div>
                 </div>
             </Container>
         </>

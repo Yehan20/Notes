@@ -4,8 +4,10 @@ import Slider from '../components/slider'
 import { useGlobalContext } from '../contexts/AuthContext'
 import { reducer, defaultState } from '../reducer/reducer'
 import { Link } from 'react-router-dom'
-import { auth as Auth } from '../firebase'
+import { auth as Auth,db } from '../firebase'
 import {useNavigate} from 'react-router-dom'
+import {doc,setDoc} from 'firebase/firestore';
+
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -42,6 +44,13 @@ const SignUp = () => {
             try {
                 const result = await signUp(Auth, newUser.email, newUser.password)
                 console.log(result);
+                // now we need to create the document
+                const data={
+                    notes:[{}],
+                }
+                await setDoc(doc(db, "notes", newUser.email), data); 
+
+
                 navigate('/user-home')
             } catch (err) {
                 console.log('error is', err);

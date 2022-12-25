@@ -13,7 +13,7 @@ export const reducer=(state,action)=>{
     if(action.type==='FALSE-LOGIN'){
       console.log('flase login')
       return {
-        ...state,errorMsg:'Login Incorrect',color:'danger',empty:false
+        ...state,errorMsg:'Login Incorrect',color:'danger',empty:false,email:'',password:''
       }
     }
 

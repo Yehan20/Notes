@@ -40,7 +40,11 @@ const Login = () => {
         }
         catch (error) {
             dispatch({ type: 'FALSE-LOGIN', payload: 'Error' })
+            emailRef.current.value=''
+            passwordRef.current.value=''
         }
+
+        console.log(state);
 
 
     }
@@ -50,7 +54,7 @@ const Login = () => {
             <Slider />
             <Container>
                 <div className="login-container">
-                    <h3>Login  {String(state.empty)}</h3>
+
                     {state.errorMsg && <Alert className="w-100" style={{ maxWidth: '500px' }} variant={state.color}>{state.errorMsg}</Alert>}
 
                     <Form className="login-form" onSubmit={handleSubmit}>

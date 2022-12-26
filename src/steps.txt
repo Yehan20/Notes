@@ -1,3 +1,28 @@
 # Login + Sign Up ui
 # Firebase config
 # Login Functionality
+
+# create - documents per user signed in so when you sign in we make a document
+  
+# Each time a user signs in - his document is created with some parameters 
+
+# Note object - can add up to 7 tasks , can mark them complete , will get disable and cannot eddit them after a day passes
+can clear the note, in each new day new note is added 
+
+
+document={
+   const notes=[{note},{note},{note},{note}],
+}
+
+# Note  array => note object =>  
+const notes=[{note},{note},{note},{note}]
+
+const note={ // a note instacne of each day that you have acces to 
+    usernotes:[{text:'message kkkwefewff',status},{text:'wqdwqd',status}] // each tasls inside the note//
+    marked:true,
+    created:t
+}
+
+# Have input and button and when we click add a task new input should be generated or rendered , and when we save the inputs should be disabled
+and we should have a check box behine them
+

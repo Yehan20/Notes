@@ -3,7 +3,7 @@ import { useGlobalContext } from '../contexts/AuthContext'
 import { Button, Container, Form, FormGroup } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { auth as Auth,db } from '../firebase'
-import {getDoc,doc} from 'firebase/firestore'
+import {getDoc,doc,updateDoc} from 'firebase/firestore'
 import {reducer} from '../reducer/taskReducer'
 
 
@@ -18,29 +18,39 @@ const Home = () => {
     await logout(Auth)
     navigate('/')
   }
+  
 
   useEffect(()=>{
+     getNotes()
+  },[])
 
-  })
-  const getNotes=()=>{
+
+
+  const getNotes=async()=>{
     const docRef=doc(db,'notes',user.email)
-  }
-  // const [tasks, setTask] = useState(['task']) 
-  // const [finish, setFinish] = useState(false);
-  // const [disabled, setDisabled] = useState(false);
-  // const [singleTask,setSingleTask]=useState([]) // the arrray for each note
+    try{
+      const docData = await getDoc(docRef);
+      dispatch({type:'ADD-NOTES',payload:docData.data().notes})
 
+    }
+    catch(error){
+      console.log(error);
+    }
+    
+  }
 
   const defaultState={
      finish:false,
      disabled:false,
      singleTask:[],
-     task:['task']
+     task:['task'],
+     noteList:[],
+     singleTaskClone:[]
   }
   
  
   const[state,dispatch ]=useReducer(reducer,defaultState)
-  console.log(state.singleTask);
+
 
   const handleCheck=(values,e)=>{
 
@@ -50,14 +60,36 @@ const Home = () => {
        e.target.disabled=true
     };
   }
+  const handleOne=(values,e)=>{
+    // console.log(values);
+    dispatch({type:'ADD-ONE',payload:values}) // in dispact send an object of a type and payload to be taken in the action
+
+
+       e.target.disabled=true
+    
+  }
+
+  const handleSave=async()=>{
+    dispatch({type:'HANDLE-SAVE'})
+    const docRef=doc(db,'notes',user.email);
+    console.log(state.singleTaskClone)
+    try{
+      await updateDoc(docRef,{
+        notes:[...state.noteList,{note:state.singleTaskClone}]
+      })
+    }catch(err){
+      console.log(err);
+    }
+
+  }
 
   return (
-    <context.Provider value={{handleCheck}}>
+    <context.Provider value={{handleCheck,handleOne}}>
           <Container>{user.email}
       <Button variant='danger' onClick={handleLogout}>
         Logout
       </Button>
-      <Button onClick={()=>isAdd(true)}>
+      <Button onClick={()=>isAdd(!add)}>
         Add New Note
       </Button>
       {
@@ -68,9 +100,26 @@ const Home = () => {
           })
         }
         <Button varient='info' disabled={state.disabled}  onClick={() =>dispatch({type:'ADD-TASK',payload:'task'})} className="d-block">add task</Button>
-        <Button varient='info' disabled={state.disabled} onClick={()=>dispatch({type:'HANDLE-SAVE'})} className="d-block">save</Button>
+        <Button varient='info' disabled={state.disabled} onClick={()=>handleSave()} className="d-block">save</Button>
       </Form>
       }
+      <div className="note-list">
+    
+        {state.noteList && state.noteList.map((item,index)=>{
+          const not =item.note;
+          return <div item={item.note} className='note' key={index}>
+             <h3>List</h3>
+              {
+                not.map((item,index)=>{
+                  return <div className='d-flex' key={index}>
+                    <Form.Control  value={item} disabled={true} />
+                    <Form.Check type="checkbox" checked disabled={true} />
+                    </div>
+                })
+              }
+          </div>
+        })}
+      </div>
 
 
     </Container>
@@ -81,7 +130,7 @@ const Home = () => {
 
 const Task = ({ finish, disabled }) => {
 
-  const{handleCheck}=useContext(context)
+  const{handleCheck,handleOne}=useContext(context)
   const [taskValue,setTaskValue]=useState('')
 
   return <FormGroup className="my-3">
@@ -90,6 +139,7 @@ const Task = ({ finish, disabled }) => {
       <Form.Control type="text" value={taskValue} onChange={(e)=>setTaskValue(e.target.value)} disabled={disabled} placeholder="add your tasks" />
       {finish && <Form.Check type="checkbox" value={taskValue} onChange={(e)=>handleCheck(taskValue,e)} />
       }
+      <Button onClick={(e)=>handleOne(taskValue,e)} value={taskValue}> Save Task </Button>
     </div>
   </FormGroup>
 }

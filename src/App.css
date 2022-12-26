@@ -121,6 +121,16 @@ input{
 .App .error  a{
   color: #fff;
 }
+
+/* note css */
+.note-list{
+  display: flex;
+
+}
+.note-list .note{
+  border: 1px solid red;
+  width: 100%;
+}
 /* FOOTER css */
 footer{
   margin-top: auto;

@@ -8,7 +8,6 @@ export const useGlobalContext = () => {
     return useContext(AuthContext)
 }
 
-
 const signUp=(Auth,email,password)=>{
     return createUserWithEmailAndPassword(Auth,email,password)
 }
@@ -20,7 +19,6 @@ const login = (Auth,email,password)=>{
 const logout = (Auth)=>{
     return signOut(Auth)
 }
-
 
 export const AuthProvider = ({ children }) => {
     const[heading,setHeading]=useState('');

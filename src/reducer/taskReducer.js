@@ -1,3 +1,4 @@
+
 export const reducer=(state,action)=>{
     if(action.type==='HANDLE-CHECK'){
       console.log(state);
@@ -17,7 +18,7 @@ export const reducer=(state,action)=>{
       console.log('action',action.payload); 
       // const newNotes=[...state.noteList,action.payload]
       return {
-        ...state,noteList:action.payload
+        ...state,noteList:action.payload,noteList2:action.payload
       }
     }
 
@@ -29,13 +30,38 @@ export const reducer=(state,action)=>{
       }
     }
 
+    // TEMO
+    if(action.type==='ADD'){
+      const newValue = state.value + 1
+      return {...state,value:newValue}
+    }
+
     if(action.type==='ADD-ONE'){
-      console.log(action.payload);
-      const newTasks=[...state.singleTaskClone,action.payload]
+      const {values,completed}=action.payload;
+       const newTasks=[...state.singleTaskClone,{task:values,completed:completed}]
+
+  
 
       return {
         ...state,singleTaskClone:newTasks
       }
     }
+
+    if(action.type==='FINALIZE'){
+      const index=action.payload; 
+      const updatedArray = state.noteList.map((item,i)=>{
+        if(index===i){
+          return {
+            ...item,completed:true
+          }  
+        }
+        return item
+      })
+      
+      return {
+        ...state,noteList:[...updatedArray]
+      }
+    }
+
     return state;
   }

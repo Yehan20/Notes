@@ -179,6 +179,24 @@ input{
    background-color: transparent;
    color: #fff !important;
 }
+
+/* Model css  */
+.addModel .modal-content{
+  border-radius: 0!important;
+  background-color: var(--bg--main);
+}
+.addModel button{
+  white-space: nowrap;
+  border-radius: 0!important;
+  background-color: var(--bg--sub);
+  font-family: var(--ff--words);
+  border: 0;
+}
+.addModel .modal-title{
+  font-family: var(--ff--heading);
+  font-size: 2rem;
+  font-weight: 600;
+} 
 /* FOOTER css */
 footer{
   margin-top: auto;

@@ -18,7 +18,7 @@ export const reducer=(state,action)=>{
       console.log('action',action.payload); 
       // const newNotes=[...state.noteList,action.payload]
       return {
-        ...state,noteList:action.payload,noteList2:action.payload
+        ...state,noteList:action.payload,noteList2:action.payload,disabled:false
       }
     }
 

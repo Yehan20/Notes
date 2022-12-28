@@ -30,17 +30,11 @@ export const reducer=(state,action)=>{
       }
     }
 
-    // TEMO
-    if(action.type==='ADD'){
-      const newValue = state.value + 1
-      return {...state,value:newValue}
-    }
 
     if(action.type==='ADD-ONE'){
       const {values,completed}=action.payload;
        const newTasks=[...state.singleTaskClone,{task:values,completed:completed}]
 
-  
 
       return {
         ...state,singleTaskClone:newTasks
@@ -60,6 +54,12 @@ export const reducer=(state,action)=>{
       
       return {
         ...state,noteList:[...updatedArray]
+      }
+    }
+
+    if(action.type==='DONE'){
+      return {
+        ...state,done:!state.done
       }
     }
 

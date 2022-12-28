@@ -1,8 +1,8 @@
 :root{
   --ff--words:'Open Sans', sans-serif;
   --ff--heading: 'Oswald', sans-serif;
-  --bg--main:#f5f3de;
-  --bg--sub:#6e4117;
+  --bg--main:rgb(249, 242, 212);
+  --bg--sub:rgb(135, 62, 35);
 }
 
 *,*::before,*::after{
@@ -125,11 +125,59 @@ input{
 /* note css */
 .note-list{
   display: flex;
+  flex-wrap: wrap;
+  gap:1.5em;
+  justify-content: flex-end;
+  margin-bottom: 1em;
+}
+
+.note-list .note{
+  /* border: 1px solid red; */
+  width: 100%;
+  max-width: 375px;
+  background-color: var(--bg--sub);
+  padding: 1em;
+  color: #fff;
+  border-radius: 0.2em;
+  
+}
+.note-list .note input[type=text]:disabled{
+  border-radius: 0.2em;
+}
+.note-list h3{
+  font-family: var(--ff--heading);
+}
+.form-control:disabled{
+  background-color: #fff !important;
+  
+  border: 0 !important;
+  border-bottom: 2px solid #6e4117 !important;
+  color: #6e4117;
+  /* border-radius: 0.2em !important; */
+}
+/*  custom buttons */
+.App .logout-btn{
+  position: absolute !important;
+  right: 45px;
+  top: 45px;
 
 }
-.note-list .note{
-  border: 1px solid red;
-  width: 100%;
+.App .add-btn{
+   background-color: transparent;
+   /* border-radius: 50px; */
+   
+}
+.App .add-btn:hover{
+  background-color: transparent;
+  border: 0;
+  outline: none;
+}
+.App .file{
+   color: var(--bg--sub);
+}
+.App .note-list .note .btn.disabled,.App .note-list .note .btn:disabled{
+   background-color: transparent;
+   color: #fff !important;
 }
 /* FOOTER css */
 footer{

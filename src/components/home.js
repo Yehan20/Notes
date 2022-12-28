@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import { auth as Auth,db } from '../firebase'
 import {getDoc,doc,updateDoc} from 'firebase/firestore'
 import {reducer} from '../reducer/taskReducer'
+import {AiFillFileAdd,AiFillCheckSquare} from 'react-icons/ai'
+
 
 
 const context = React.createContext();
@@ -28,6 +30,7 @@ const Home = () => {
     noteList:[],
     noteList2:[],
     singleTaskClone:[],
+    done:false,
  
     
  }
@@ -51,7 +54,7 @@ const Home = () => {
 
   useEffect(()=>{
     getNotes()
- },[state.finish,getNotes])
+ },[state.finish,getNotes,state.done])
 
 
 
@@ -79,12 +82,15 @@ const Home = () => {
   const finalizeNote=async(e)=>{
 
     const docRef=doc(db,'notes',user.email);
+  
     e.target.disabled=true
     try{
 
       await updateDoc(docRef,{
         notes:[...state.noteList]
       })
+
+      dispatch({type:'DONE'})
   
       
     }catch(err){
@@ -92,16 +98,18 @@ const Home = () => {
     }
   }
 
+  console.log('rerender')
 
 
   return (
     <context.Provider value={{handleOne}}>
-          <Container>{user.email}
-      <Button variant='danger' onClick={handleLogout}>
+      <Container fluid>
+      <Container className='d-flex align-items-start'> 
+      <Button variant='danger' className='logout-btn' onClick={handleLogout}>
         Logout
       </Button>
-      <Button onClick={()=>isAdd(!add)}>
-        Add New Note
+      <Button className='p-0 add-btn hvr-buzz-out' onClick={()=>isAdd(!add)}>
+        <AiFillFileAdd className='file' size={300} />
       </Button>
       {
         add &&  <Form className="login-form" >
@@ -122,8 +130,8 @@ const Home = () => {
           const test=state.noteList2[index].completed
           console.log('test',test);
           console.log(item);
-          return <div item={item.note} className='note' key={index}>
-             <h3>{item.date}</h3>
+          return <div className='note' key={index}>
+             <h3>Created :{item.date}</h3>
               {
                 not.map((item,index)=>{
                   return <div className='d-flex' key={index}>
@@ -133,13 +141,14 @@ const Home = () => {
               }
               {!test &&    <Form.Control type='number' min='0' onChange={()=> dispatch({type:'FINALIZE',payload:index})} placeholder='Completed task amounts' max={item.note.length}  /> }
            
-              <Button disabled={test} onClick={(e)=>finalizeNote(e)}>{test?'Tasks Marked':'Mark Tasks'}</Button>
+              <Button className='px-0' disabled={test} onClick={(e)=>finalizeNote(e)}>{test?<AiFillCheckSquare size={30}/>:'Mark Tasks'}</Button>
           </div> 
         })}
       </div>
 
 
     </Container>
+      </Container>
     </context.Provider>
   )
 

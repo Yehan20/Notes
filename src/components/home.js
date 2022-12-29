@@ -4,7 +4,7 @@ import { Button, Container, Form, FormGroup, Modal } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { auth as Auth, db } from '../firebase'
 import { getDoc, doc, updateDoc } from 'firebase/firestore'
-import { reducer } from '../reducer/taskReducer'
+import { reducer , defaultState } from '../reducer/taskReducer'
 import { AiFillFileAdd, AiFillCheckSquare } from 'react-icons/ai'
 import Loader from './Loader'
 
@@ -31,19 +31,7 @@ const Home = () => {
   }
 
 
-  const defaultState = {
-    finish: false,
-    disabled: false,
-    singleTask: [],
-    task: ['task'],
-    noteList: [],
-    noteList2: [],
-    singleTaskClone: [],
-    done: false,
 
-
-
-  }
   const [state, dispatch] = useReducer(reducer, defaultState)
 
 
@@ -85,7 +73,7 @@ const Home = () => {
     dispatch({ type: 'HANDLE-SAVE' })
     const docRef = doc(db, 'notes', user.email);
     setShow(false)
-    const createdDay = new Date().toJSON().slice(0, 10)// get date
+    const createdDay = new Date().toJSON().slice(0, 10) +"  Time: " +String(new Date().getHours()) +":"+ String(new Date().getMinutes()) // get date 
     try {
       await updateDoc(docRef, {
         notes: [...state.noteList, { note: state.singleTaskClone, date: createdDay, completed: false }].reverse()
@@ -121,13 +109,14 @@ const Home = () => {
   return (
     <context.Provider value={{ handleOne }}>
       <Container fluid>
-        <Container className='d-flex align-items-start'>
+        <Container className='d-flex align-items-start home-container'>
           <Button variant='danger' className='logout-btn' onClick={handleLogout}>
             Logout
           </Button>
 
-          <Button className='p-0 add-btn hvr-buzz-out' onClick={() => setShow(!show)}>
+          <Button className='p-0 add-btn hvr-buzz-out text-dark add-note' title='Add Note' onClick={() => setShow(!show)}>
             <AiFillFileAdd className='file' size={300} />
+            New Note
           </Button>
           {
             show && <Modal show={show} onHide={handleClose} className='addModel' >
@@ -164,20 +153,20 @@ const Home = () => {
                 const cmplted = state.noteList2[index].completed
                 return <div className={`note ${cmplted ? 'completed-note' : 'incomplete-note'}`} key={index}>
 
-                  <h3>Created :{item.date}</h3>
+                  <h3>{item.date}</h3>
                   <h4>Your Tasks</h4>
                   <ol>
                     {
                       not.map((item, index) => {
-                        return <><li key={index}>{item.task}</li></>
+                        return <li key={index}>{item.task}</li>
                         
                       })
                     }
                   </ol>
 
-                  {!cmplted && <Form.Control type='number' value='1' onFocus={() => dispatch({ type: 'FINALIZE', payload: index })} onChange={() => dispatch({ type: 'FINALIZE', payload: index })} placeholder='Completed task amounts' max={item.note.length} />}
+                  {!cmplted && <Form.Control type='number' min='1'  defaultValue={0} onFocus={() => dispatch({ type: 'FINALIZE', payload: index })} onChange={() => dispatch({ type: 'FINALIZE', payload: index })} placeholder='Completed task amounts' max={item.note.length} />}
 
-                  <Button className={`mt-2 ${cmplted?'px-0':'px-2'}`} disabled={cmplted} onClick={(e) => finalizeNote(e)}>{cmplted ? <AiFillCheckSquare size={30} /> : 'Mark Tasks'}</Button>
+                  <Button className={`mt-2 ${cmplted?'px-0':'px-2'}`} disabled={cmplted} onClick={(e) => finalizeNote(e)}>{cmplted ? <><AiFillCheckSquare size={30}  />Task Completed</>: 'Mark Tasks'}</Button>
                 </div>
               })
             }
@@ -192,7 +181,7 @@ const Home = () => {
 
 }
 
-const Task = ({ finish, disabled }) => {
+const Task = ({disabled }) => {
 
   const { handleOne } = useContext(context)
   const [taskValue, setTaskValue] = useState('')

@@ -71,3 +71,17 @@ export const reducer=(state,action)=>{
 
     return state;
   }
+  
+  export const defaultState = {
+    finish: false,
+    disabled: false,
+    singleTask: [],
+    task: ['task'],
+    noteList: [],
+    noteList2: [],
+    singleTaskClone: [],
+    done: false,
+
+
+
+  }

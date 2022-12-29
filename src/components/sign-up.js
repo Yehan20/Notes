@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form, FormGroup, Button, Container, Alert } from 'react-bootstrap'
 import Slider from '../components/slider'
 import { useGlobalContext } from '../contexts/AuthContext'
@@ -13,16 +13,13 @@ const SignUp = () => {
 
     const [newUser, setUser] = useState({ email: '', password: '', c_pass: '' })
     const [error, setError] = useState('')
-    const { changeHeading, signUp, user } = useGlobalContext();
+    const { signUp } = useGlobalContext();
     const [features, setFeatures] = useState('');
     const [disabled,setDisabled]=useState(false)
 
     // useHis
 
-    useEffect(() => {
-        changeHeading('Sign Up')
-    }, [])
-
+ 
 
   
     const handleInput = (target) => {

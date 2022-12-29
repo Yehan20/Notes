@@ -2,7 +2,7 @@ import React from 'react'
 import { Container } from 'react-bootstrap'
 import {useGlobalContext} from '../contexts/AuthContext'
 export const Header = () => {
-    const {heading,changeHeading} = useGlobalContext();
+    const {heading} = useGlobalContext();
     // console.log('rendered')
     return (
         <header>

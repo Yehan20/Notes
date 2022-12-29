@@ -7,9 +7,7 @@ import { useGlobalContext } from "../contexts/AuthContext";
 import { auth as Auth } from '../firebase'
 const Login = () => {
 
-    useEffect(() => {
-        changeHeading('')
-    }, [])
+
 
     const navigate = useNavigate();
 

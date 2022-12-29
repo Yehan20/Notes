@@ -36,15 +36,13 @@ export const AuthProvider = ({ children }) => {
           return unsubscribe;
     },[])
 
-    const changeHeading =(value)=>{
-        setHeading(value)
-    }
+
 
     return (
 
         <AuthContext.Provider value=
         {{ heading,
-           changeHeading,
+           
            signUp,
            user,
            login,

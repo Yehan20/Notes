@@ -1,6 +1,6 @@
 import {useGlobalContext} from '../contexts/AuthContext'
-import {Outlet,Navigate} from 'react-router-dom'
-import Home from '../components/home'
+import {Navigate} from 'react-router-dom'
+
 const PrivateRoute = ({children}) => {
     const{user}=useGlobalContext()
     console.log(children)

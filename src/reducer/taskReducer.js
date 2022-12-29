@@ -10,15 +10,14 @@ export const reducer=(state,action)=>{
 
     if(action.type==='HANDLE-SAVE'){   
       return {
-        ...state,disabled:true,finish:!state.finish
+        ...state,disabled:true,finish:!state.finish,task:['task'],singleTaskClone:[]
       }
     }
 
     if(action.type==='ADD-NOTES'){ 
-      console.log('action',action.payload); 
-      // const newNotes=[...state.noteList,action.payload]
+   
       return {
-        ...state,noteList:action.payload,noteList2:action.payload,disabled:false
+        ...state,noteList:action.payload.reverse(),noteList2:action.payload,disabled:false
       }
     }
 
@@ -60,6 +59,13 @@ export const reducer=(state,action)=>{
     if(action.type==='DONE'){
       return {
         ...state,done:!state.done
+      }
+    }
+
+    if(action.type==='RESET'){
+      console.log('EXECUMETS');
+      return{
+          ...state,singleTaskClone:[],task:['task']
       }
     }
 

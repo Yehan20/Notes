@@ -6,6 +6,7 @@ import { auth as Auth, db } from '../firebase'
 import { getDoc, doc, updateDoc } from 'firebase/firestore'
 import { reducer } from '../reducer/taskReducer'
 import { AiFillFileAdd, AiFillCheckSquare } from 'react-icons/ai'
+import Loader from './Loader'
 
 
 
@@ -16,8 +17,12 @@ const Home = () => {
   const navigate = useNavigate()
 
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  // const handleShow = () => setShow(true);
+  const [loading, setLoading] = useState(false)
+  const handleClose = () => {
+    dispatch({ type: 'RESET' })
+    setShow(false);
+  }
+
 
 
   const handleLogout = async () => {
@@ -37,15 +42,19 @@ const Home = () => {
     done: false,
 
 
+
   }
   const [state, dispatch] = useReducer(reducer, defaultState)
 
 
 
   const getNotes = useCallback(async () => {
+    setLoading(true)
     const docRef = doc(db, 'notes', user.email)
     try {
+
       const docData = await getDoc(docRef);
+      setLoading(false)
       dispatch({ type: 'ADD-NOTES', payload: docData.data().notes })
     }
     catch (error) {
@@ -66,20 +75,20 @@ const Home = () => {
   const handleOne = (values, e) => {
 
     dispatch({ type: 'ADD-ONE', payload: { values: values, completed: false } }) // in dispact send an object of a type and payload to be taken in the action
-    e.target.textContent='Saved';
+    e.target.textContent = 'Saved';
     e.target.disabled = true
-   
+
   }
 
   const handleSave = async () => {
-   
+
     dispatch({ type: 'HANDLE-SAVE' })
     const docRef = doc(db, 'notes', user.email);
     setShow(false)
     const createdDay = new Date().toJSON().slice(0, 10)// get date
     try {
       await updateDoc(docRef, {
-        notes: [...state.noteList, { note: state.singleTaskClone, date: createdDay, completed: false }]
+        notes: [...state.noteList, { note: state.singleTaskClone, date: createdDay, completed: false }].reverse()
       })
     } catch (err) {
       console.log(err);
@@ -91,7 +100,7 @@ const Home = () => {
     const docRef = doc(db, 'notes', user.email);
 
     e.target.disabled = true
- 
+
     try {
 
       await updateDoc(docRef, {
@@ -116,6 +125,7 @@ const Home = () => {
           <Button variant='danger' className='logout-btn' onClick={handleLogout}>
             Logout
           </Button>
+
           <Button className='p-0 add-btn hvr-buzz-out' onClick={() => setShow(!show)}>
             <AiFillFileAdd className='file' size={300} />
           </Button>
@@ -125,15 +135,17 @@ const Home = () => {
                 <Modal.Title>New Note</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-              <Button varient='info' disabled={state.disabled} onClick={() => dispatch({ type: 'ADD-TASK', payload: 'task' })} className="d-block">Add task</Button>
+                <Button varient='info' disabled={state.disabled} onClick={() => dispatch({ type: 'ADD-TASK', payload: 'task' })} className="d-block">Add task</Button>
                 <Form className="login-form" >
+                  {/* <Form.Label>Note Name</Form.Label>
+                  <Form.Control placeholder='' /> */}
                   {
                     state.task.map((task, index) => {
                       return <Task key={index} disabled={state.disabled} finish={state.finish} />
                     })
                   }
-                  
-                  <Button varient='info'  disabled={state.task.length!==state.singleTaskClone.length} onClick={() => handleSave()} className="d-block">Save Note</Button>
+
+                  <Button varient='info' disabled={state.task.length !== state.singleTaskClone.length} onClick={() => handleSave()} className="d-block">Save Note</Button>
                 </Form>
               </Modal.Body>
 
@@ -145,25 +157,31 @@ const Home = () => {
             </Modal>
           }
           <div className="note-list">
+            {loading && <Loader />}
+            {
+              !loading && state.noteList && state.noteList.map((item, index) => {
+                const not = item.note;
+                const cmplted = state.noteList2[index].completed
+                return <div className={`note ${cmplted ? 'completed-note' : 'incomplete-note'}`} key={index}>
 
+                  <h3>Created :{item.date}</h3>
+                  <h4>Your Tasks</h4>
+                  <ol>
+                    {
+                      not.map((item, index) => {
+                        return <><li key={index}>{item.task}</li></>
+                        
+                      })
+                    }
+                  </ol>
 
-            {state.noteList && state.noteList.map((item, index) => {
-              const not = item.note;
-              const test = state.noteList2[index].completed
-              return <div className='note' key={index}>
-                <h3>Created :{item.date}</h3>
-                {
-                  not.map((item, index) => {
-                    return <div className='d-flex' key={index}>
-                      <Form.Control value={item.task} disabled={true} />
-                    </div>
-                  })
-                }
-                {!test && <Form.Control type='number' min='0' onChange={() => dispatch({ type: 'FINALIZE', payload: index })} placeholder='Completed task amounts' max={item.note.length} />}
+                  {!cmplted && <Form.Control type='number' value='1' onFocus={() => dispatch({ type: 'FINALIZE', payload: index })} onChange={() => dispatch({ type: 'FINALIZE', payload: index })} placeholder='Completed task amounts' max={item.note.length} />}
 
-                <Button className='px-0' disabled={test} onClick={(e) => finalizeNote(e)}>{test ? <AiFillCheckSquare size={30} /> : 'Mark Tasks'}</Button>
-              </div>
-            })}
+                  <Button className={`mt-2 ${cmplted?'px-0':'px-2'}`} disabled={cmplted} onClick={(e) => finalizeNote(e)}>{cmplted ? <AiFillCheckSquare size={30} /> : 'Mark Tasks'}</Button>
+                </div>
+              })
+            }
+
           </div>
 
 
@@ -182,7 +200,7 @@ const Task = ({ finish, disabled }) => {
   return <FormGroup className="my-3">
     <Form.Label>Task</Form.Label>
     <div className='d-flex'>
-      <Form.Control type="text" value={taskValue}  onChange={(e) => setTaskValue(e.target.value)} disabled={disabled} placeholder="add your tasks" />
+      <Form.Control type="text" value={taskValue} onChange={(e) => setTaskValue(e.target.value)} disabled={disabled} placeholder="add your tasks" />
 
       <Button onClick={(e) => handleOne(taskValue, e)} value={taskValue}> Save Task </Button>
     </div>

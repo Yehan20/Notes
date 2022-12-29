@@ -21,7 +21,7 @@ const logout = (Auth)=>{
 }
 
 export const AuthProvider = ({ children }) => {
-    const[heading,setHeading]=useState('');
+    const[heading]=useState('');
     const[user,setCurrentUser]=useState({});
     const[loading,setLoading]=useState(true)
 

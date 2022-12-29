@@ -1,4 +1,4 @@
-import React, { useReducer, useRef, useEffect ,useState } from "react";
+import React, { useReducer, useRef,useState } from "react";
 import { Form, FormGroup, Button, Container, Alert } from 'react-bootstrap'
 import { reducer, defaultState } from '../reducer/reducer'
 import Slider from '../components/slider'
@@ -14,7 +14,7 @@ const Login = () => {
 
     const emailRef = useRef();
     const passwordRef = useRef()
-    const { changeHeading, login } = useGlobalContext()
+    const {login } = useGlobalContext()
 
     const [state, dispatch] = useReducer(reducer, defaultState)
     const [disabled,setDisabled] =useState(false)
@@ -69,7 +69,7 @@ const Login = () => {
                             <Form.Label>Password</Form.Label>
                             <Form.Control required ref={passwordRef} type="password" defaultValue={state.password} placeholder="Enter Password" />
                         </FormGroup>
-                        <Button varient='info' type="submit" className="d-block">Login</Button>
+                        <Button disabled={disabled} varient='info' type="submit" className="d-block">Login</Button>
                     </Form>
                     <Link to='/sign-up' className='text-dark' title="Click to visit">Not a user ?click here </Link>
                 </div>

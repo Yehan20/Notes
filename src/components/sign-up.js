@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Form, FormGroup, Button, Container, Alert } from 'react-bootstrap'
 import Slider from '../components/slider'
 import { useGlobalContext } from '../contexts/AuthContext'

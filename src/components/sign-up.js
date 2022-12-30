@@ -43,7 +43,7 @@ const SignUp = () => {
                 const result = await signUp(Auth, newUser.email, newUser.password)
                 console.log(result);
                 const data={
-                    notes:[{}],
+                    notes:[],
                 }
                 await setDoc(doc(db, "notes", newUser.email), data); 
                 setDisabled(false)

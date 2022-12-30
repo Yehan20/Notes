@@ -43,9 +43,6 @@ const Home = () => {
 
       const docData = await getDoc(docRef);
       let userNote= docData.data().notes;
-      if(userNote===undefined){
-        userNote=[]
-      }
       setLoading(false)
       dispatch({ type: 'ADD-NOTES', payload: userNote })
     }
@@ -153,7 +150,7 @@ const Home = () => {
           <div className="note-list">
             {loading && <Loader />}
             {
-              !loading &&  state.noteList && state.noteList.map((item, index) => {
+              !loading &&  state.noteList.length>0 && state.noteList.map((item, index) => {
                 const not = item.note;
                 const cmplted = state.noteList2[index].completed
                 return <div className={`note ${cmplted ? 'completed-note' : 'incomplete-note'}`} key={index}>
@@ -194,7 +191,9 @@ const Task = ({disabled }) => {
   return <FormGroup className="my-3">
     <Form.Label>Task</Form.Label>
     <div className='d-flex'>
-      <Form.Control type="text" value={taskValue} onChange={(e) => setTaskValue(e.target.value)} disabled={disabled} placeholder="add your tasks" />
+      <Form.Control type="text" value={taskValue} onChange={(e) => {
+        e.target.disabled=true;
+        setTaskValue(e.target.value)}} disabled={disabled} placeholder="add your tasks" />
 
       <Button onClick={(e) => handleOne(taskValue, e)} value={taskValue}> Save Task </Button>
     </div>

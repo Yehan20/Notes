@@ -15,7 +15,10 @@ export const reducer=(state,action)=>{
     }
 
     if(action.type==='ADD-NOTES'){ 
-   
+      // if(state.no)
+      // if(state.noteList.length===1){
+      //   state.noteList.length 
+      // }
       return {
         ...state,noteList:action.payload.reverse(),noteList2:action.payload,disabled:false
       }

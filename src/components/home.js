@@ -42,12 +42,17 @@ const Home = () => {
     try {
 
       const docData = await getDoc(docRef);
+      let userNote= docData.data().notes;
+      if(userNote===undefined){
+        userNote=[]
+      }
       setLoading(false)
-      dispatch({ type: 'ADD-NOTES', payload: docData.data().notes })
+      dispatch({ type: 'ADD-NOTES', payload: userNote })
     }
     catch (error) {
       console.log(error);
     }
+
 
   }, [user.email])
 
@@ -59,7 +64,7 @@ const Home = () => {
 
 
 
-
+  
   const handleOne = (values, e) => {
 
     dispatch({ type: 'ADD-ONE', payload: { values: values, completed: false } }) // in dispact send an object of a type and payload to be taken in the action
@@ -148,7 +153,7 @@ const Home = () => {
           <div className="note-list">
             {loading && <Loader />}
             {
-              !loading && state.noteList && state.noteList.map((item, index) => {
+              !loading &&  state.noteList && state.noteList.map((item, index) => {
                 const not = item.note;
                 const cmplted = state.noteList2[index].completed
                 return <div className={`note ${cmplted ? 'completed-note' : 'incomplete-note'}`} key={index}>
@@ -157,7 +162,7 @@ const Home = () => {
                   <h4>Your Tasks</h4>
                   <ol>
                     {
-                      not.map((item, index) => {
+                     not && not.map((item, index) => {
                         return <li key={index}>{item.task}</li>
                         
                       })

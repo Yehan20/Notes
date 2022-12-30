@@ -191,9 +191,7 @@ const Task = ({disabled }) => {
   return <FormGroup className="my-3">
     <Form.Label>Task</Form.Label>
     <div className='d-flex'>
-      <Form.Control type="text" value={taskValue} onChange={(e) => {
-        e.target.disabled=true;
-        setTaskValue(e.target.value)}} disabled={disabled} placeholder="add your tasks" />
+      <Form.Control type="text" value={taskValue} onChange={(e) => setTaskValue(e.target.value)} disabled={disabled} placeholder="add your tasks" />
 
       <Button onClick={(e) => handleOne(taskValue, e)} value={taskValue}> Save Task </Button>
     </div>

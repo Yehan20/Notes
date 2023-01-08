@@ -1,7 +1,7 @@
 :root {
   --ff--words: 'Open Sans', sans-serif;
   --ff--heading: 'Oswald', sans-serif;
-  --bg--main: rgb(249, 242, 212);
+  --bg--main: #ffffff;
   --bg--sub: rgb(135, 62, 35);
 }
 
@@ -176,7 +176,7 @@ input {
   padding: 1em;
   color: #fff;
   border-radius: 0.2em;
-
+  position: relative;
 }
 
 .note-list .note ol {
@@ -223,6 +223,13 @@ input {
 
 }
 
+.App .delete-btn {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+  
+}
 .App .add-btn:hover {
   background-color: transparent;
   border: 0;

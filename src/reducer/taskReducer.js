@@ -72,6 +72,15 @@ export const reducer=(state,action)=>{
       }
     }
 
+    if(action.type==='DELETE-NOTE'){
+       const id = action.payload;
+       const newNotes = state.noteList.filter((note,index)=>index!==id)
+       
+        return {
+          ...state,noteList:newNotes
+        }
+    }
+
     return state;
   }
   

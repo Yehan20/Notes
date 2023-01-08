@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { auth as Auth, db } from '../firebase'
 import { getDoc, doc, updateDoc } from 'firebase/firestore'
 import { reducer , defaultState } from '../reducer/taskReducer'
-import { AiFillFileAdd, AiFillCheckSquare } from 'react-icons/ai'
+import { AiFillFileAdd, AiFillCheckSquare, AiFillDelete } from 'react-icons/ai'
 import Loader from './Loader'
 
 
@@ -88,7 +88,6 @@ const Home = () => {
   const finalizeNote = async (e) => {
 
     const docRef = doc(db, 'notes', user.email);
-
     e.target.disabled = true
 
     try {
@@ -96,16 +95,27 @@ const Home = () => {
       await updateDoc(docRef, {
         notes: [...state.noteList]
       })
-
       dispatch({ type: 'DONE' })
-
 
     } catch (err) {
       console.log(err);
     }
   }
 
-
+  const deleteNote = async(id)=>{
+     dispatch({type:'DELETE-NOTE',payload:id})
+     const newNotes = state.noteList.filter((note,index)=>index!==id)
+     const docRef = doc(db, 'notes', user.email);
+     try {
+      await updateDoc(docRef, {
+        notes: [...newNotes]
+      })
+    } catch (err) {
+      console.log(err);
+    }
+    
+  }
+  console.log('note list',state.noteList);
 
 
   return (
@@ -154,7 +164,7 @@ const Home = () => {
                 const not = item.note;
                 const cmplted = state.noteList2[index].completed
                 return <div className={`note ${cmplted ? 'completed-note' : 'incomplete-note'}`} key={index}>
-
+                  <AiFillDelete className='delete-btn' onClick={()=>deleteNote(index)} title='Delete Note'/>
                   <h3>{item.date}</h3>
                   <h4>Your Tasks</h4>
                   <ol>

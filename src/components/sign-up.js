@@ -63,6 +63,7 @@ const SignUp = () => {
     return (
         <>
             <Slider />
+            <Container fluid className='sign-up-full'>
             <Container>
                 <div className="sign-up-container">
                     <h3>Sign Up</h3>
@@ -96,6 +97,7 @@ const SignUp = () => {
 
                     </Form>
                 </div>
+            </Container>
             </Container>
         </>
     )

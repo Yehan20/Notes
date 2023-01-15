@@ -120,7 +120,7 @@ const Home = () => {
 
   return (
     <context.Provider value={{ handleOne }}>
-      <Container fluid>
+      <Container fluid className='note-container'>
         <Container className='d-flex align-items-start home-container'>
           <Button variant='danger' className='logout-btn' onClick={handleLogout}>
             Logout

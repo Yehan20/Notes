@@ -5,7 +5,7 @@ export const Footer = () => {
     <footer>
       <Container>
       <p>
-        <span>Notes</span>&nbsp;<i className="fas fa-copyright"></i>&nbsp;2022 | All Rights
+        <span>Notes 2.0 </span>&nbsp;|<i className="fas fa-copyright"></i>&nbsp;2022 | All Rights
         Reserved 
       </p>
       </Container>

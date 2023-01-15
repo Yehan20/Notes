@@ -21,6 +21,9 @@ body {
 input {
   border-radius: 0 !important;
 }
+.App header{ 
+    background-color: #ffcce5;
+}
 
 .App {
   background-color: var(--bg--main);
@@ -28,6 +31,16 @@ input {
   display: flex;
   flex-direction: column;
 
+}
+
+.App .home-container{
+  padding-top: 1em;
+}
+
+.App .note-container{
+  background-color: #fff7d1;
+  padding-bottom: 3em;
+  padding-top: 2em;
 }
 
 .App .btn {
@@ -61,6 +74,9 @@ input {
   padding: 2em 0;
 }
 
+.login-full,.sign-up-full{
+  background-color: #fff7d1;
+}
 .login-container form,
 .sign-up-container form {
   width: min(100%, 500px);
@@ -156,7 +172,8 @@ input {
 }
 
 .note-list .note.incomplete-note {
-  background: rgb(234, 182, 118) !important;
+  background:#e2f1ff !important;
+  color: #000;
 }
 
 .note-list .note.incomplete-note input {
@@ -172,11 +189,19 @@ input {
 
   width: 100%;
   max-width: 375px;
-  background-color: var(--bg--sub);
+  background-color:#e4f9e0;
   padding: 1em;
-  color: #fff;
+  color: #000;
   border-radius: 0.2em;
   position: relative;
+  outline: 2px solid var(--bg--sub);
+}
+.App .note-list .note.completed-note button:disabled{
+  color: #000 !important;
+  /* background-color: red; */
+}
+.note-list .completed-note svg{
+  color: #000;
 }
 
 .note-list .note ol {
@@ -220,7 +245,7 @@ input {
 .App .add-btn {
   background-color: transparent;
   /* border-radius: 50px; */
-
+  font-weight: 600;
 }
 
 .App .delete-btn {
@@ -401,13 +426,17 @@ input {
 /* FOOTER css */
 footer {
   margin-top: auto;
-  background-color: var(--bg--sub);
-  color: #fff;
+  background-color:#ffcce5;
+  color: #000;
   padding: 20px 20px;
+  text-align: center;
+  font-family: var(--ff--heading);
 }
 
 footer p {
   margin: 0;
+  font-weight: 800;
+  font-size: 1.5rem;
 }
 
 @media (max-width:767px) {

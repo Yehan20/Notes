@@ -78,7 +78,7 @@ const Home = () => {
     const createdDay = new Date().toJSON().slice(0, 10) +"  Time: " +String(new Date().getHours()) +":"+ String(new Date().getMinutes()) // get date 
     try {
       await updateDoc(docRef, {
-        notes: [...state.noteList, { note: state.singleTaskClone, date: createdDay, completed: false }].reverse()
+        notes: [...state.noteList, { note: state.singleTaskClone, date: createdDay, completed: false,completedTasks:state.completedTasks }].reverse()
       })
     } catch (err) {
       console.log(err);
@@ -89,7 +89,7 @@ const Home = () => {
 
     const docRef = doc(db, 'notes', user.email);
     e.target.disabled = true
-
+    console.log("note lis",state.noteList)
     try {
 
       await updateDoc(docRef, {
@@ -162,6 +162,7 @@ const Home = () => {
             {
               !loading &&  state.noteList.length>0 && state.noteList.map((item, index) => {
                 const not = item.note;
+                const completedTasks = item.completedTasks;
                 const cmplted = state.noteList2[index].completed
                 return <div className={`note ${cmplted ? 'completed-note' : 'incomplete-note'}`} key={index}>
                   <AiFillDelete className='delete-btn' onClick={()=>deleteNote(index)} title='Delete Note'/>
@@ -175,8 +176,8 @@ const Home = () => {
                       })
                     }
                   </ol>
-
-                  {!cmplted && <Form.Control type='number' min='1'  defaultValue={1} onFocus={() => dispatch({ type: 'FINALIZE', payload: index })} onChange={() => dispatch({ type: 'FINALIZE', payload: index })} placeholder='Completed task amounts' max={item.note.length} />}
+                   <h5>Tasks Completed : {completedTasks}</h5>
+                  {!cmplted && <Form.Control type='number' min='1'  defaultValue={0} onFocus={(e) => dispatch({ type: 'FINALIZE', payload: {index:index,count:e.target.value} })} onChange={(e) => dispatch({ type: 'FINALIZE', payload: {index:index,count:e.target.value} })} placeholder='Completed task amounts' max={item.note.length} />}
 
                   <Button className={`mt-2 ${cmplted?'px-0':'px-2'}`} disabled={cmplted} onClick={(e) => finalizeNote(e)}>{cmplted ? <><AiFillCheckSquare size={30}  />Task Completed</>: 'Mark Tasks Completed'}</Button>
                 </div>

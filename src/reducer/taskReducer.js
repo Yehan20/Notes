@@ -44,11 +44,14 @@ export const reducer=(state,action)=>{
     }
 
     if(action.type==='FINALIZE'){
-      const index=action.payload; 
+      const index=action.payload.index;
+      const count=action.payload.count; 
+      console.log(index)
+      console.log('count',count)
       const updatedArray = state.noteList.map((item,i)=>{
         if(index===i){
           return {
-            ...item,completed:true
+            ...item,completed:true,completedTasks:count
           }  
         }
         return item
@@ -93,6 +96,7 @@ export const reducer=(state,action)=>{
     noteList2: [],
     singleTaskClone: [],
     done: false,
+    completedTasks:0
 
 
 

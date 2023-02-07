@@ -46,8 +46,7 @@ export const reducer=(state,action)=>{
     if(action.type==='FINALIZE'){
       const index=action.payload.index;
       const count=action.payload.count; 
-      console.log(index)
-      console.log('count',count)
+   
       const updatedArray = state.noteList.map((item,i)=>{
         if(index===i){
           return {
@@ -84,6 +83,20 @@ export const reducer=(state,action)=>{
         }
     }
 
+    if(action.type==='FIND-TOTAL'){
+        let totalTasks = state.noteList.reduce((amount,notelist)=>{
+               let nextAmount = Number(notelist.completedTasks===-1?0:notelist.completedTasks)
+               amount = Number(amount) + nextAmount
+               return amount
+        },0)
+
+        
+
+        return {
+          ...state,totalTaskAmount:totalTasks
+        }
+    }
+
     return state;
   }
   
@@ -96,8 +109,8 @@ export const reducer=(state,action)=>{
     noteList2: [],
     singleTaskClone: [],
     done: false,
-    completedTasks:0
-
-
+    completedTasks:-1,
+    totalTasksCompleted:0,
+    totalTaskAmount:0
 
   }

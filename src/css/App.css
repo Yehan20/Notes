@@ -2,7 +2,8 @@
   --ff--words: 'Open Sans', sans-serif;
   --ff--heading: 'Oswald', sans-serif;
   --bg--main: #ffffff;
-  --bg--sub: rgb(135, 62, 35);
+  --bg--sub: #64a15f;
+  --bg--red:#ffcccb;
 }
 
 *,
@@ -18,11 +19,20 @@ body {
   font-family: var(--ff--words);
 }
 
+h5{
+  font-family: var(--ff--words);
+  color: #000;
+}
 input {
   border-radius: 0 !important;
 }
 .App header{ 
-    background-color: #ffcce5;
+    background-color: #fff;
+    padding: 1em 2em;
+}
+.App .no-tasks{
+    font-family: var(--ff--heading);
+    font-size: 3rem;
 }
 
 .App {
@@ -38,9 +48,25 @@ input {
 }
 
 .App .note-container{
-  background-color: #fff7d1;
-  padding-bottom: 3em;
-  padding-top: 2em;
+  background-color:#fbe2c2;
+  padding: 0 3em 0 0em;
+}
+.App .note-container .sec-1{
+  background-color:#c7e5bd;
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 2em;
+  width: 25%;
+  padding-top: 3em;
+  align-content: flex-start;
+
+}
+.App .note-container .sec-1  button{
+  font-family: var(--ff--heading) !important;
+  font-size: 2rem;
+  align-self: start;
+
+
 }
 
 .App .btn {
@@ -75,7 +101,7 @@ input {
 }
 
 .login-full,.sign-up-full{
-  background-color: #fff7d1;
+  background-color: #f5f5f5;
 }
 .login-container form,
 .sign-up-container form {
@@ -169,10 +195,14 @@ input {
   justify-content: flex-end;
   margin-bottom: 1em;
   width: 100%;
+  padding-top: 3em;
+  padding-bottom: 3em;
 }
-
+.note-list #zero{
+  border: 5px solid var(--bg--red);
+}
 .note-list .note.incomplete-note {
-  background:#e2f1ff !important;
+  border: 5px solid #e2f1ff !important;
   color: #000;
 }
 
@@ -188,13 +218,14 @@ input {
 .note-list .note {
 
   width: 100%;
-  max-width: 375px;
-  background-color:#e4f9e0;
+  max-width: 300px;
+  border:5px solid #e4f9e0;
+  background-color: #fff;
   padding: 1em;
-  color: #000;
-  border-radius: 0.2em;
+  color: #444;
+  border-radius: 0.1em;
   position: relative;
-  outline: 2px solid var(--bg--sub);
+
 }
 .App .note-list .note.completed-note button:disabled{
   color: #000 !important;
@@ -206,15 +237,49 @@ input {
 
 .note-list .note ol {
   padding-left: 1.5em;
-  background-color: var(--bg--main) !important;
+  background-color: #f5f5f5;
 }
-
+.note-list h2{
+  font-family: var(--ff--heading);
+  font-weight: 600;
+  font-size: 2rem;
+}
 .note-list li {
   color: #000;
 }
 
 .note-list .note input[type=text]:disabled {
   border-radius: 0.2em;
+}
+.keys{
+  align-content: flex-start;
+  padding-top: 2em;
+}
+.keys h4{
+  font-size: 0.8rem;
+  font-family: var(--ff--words);
+  position: relative;
+  padding-left: 2em;
+}
+.keys h4::before {
+  position: absolute;
+  content: '';
+  left: 0px;
+  top: 0;
+  width: 15px;
+  height: 15px;
+
+  border: 1px solid #000
+
+}
+.keys .red::before{
+  background-color: var(--bg--red);
+}
+.keys .blue::before{
+  background-color: #e2f1ff;
+}
+.keys .green::before {
+  background-color: #c7e5bd;
 }
 
 .note-list .note input[type=number] {
@@ -223,6 +288,8 @@ input {
 
 .note-list h3 {
   font-family: var(--ff--heading);
+  font-size: 1.2rem;
+  color: #000;
 }
 
 .form-control:disabled {
@@ -251,7 +318,7 @@ input {
 .App .delete-btn {
   position: absolute;
   right: 10px;
-  top: 10px;
+  top: 18px;
   cursor: pointer;
   
 }
@@ -309,7 +376,7 @@ input {
   position: static !important;
   z-index: 100001;
   width: 100%;
-  height: 100%;
+  height: auto;
   display: flex;
   justify-content: center;
   margin: 0 auto;
@@ -325,7 +392,7 @@ input {
   text-align: center;
   position: relative;
   left: -30px;
-  top: 100px;
+  top: 00px;
   margin-left: 0;
   margin-top: 0px;
   /* overflow: hidden; */
@@ -426,7 +493,7 @@ input {
 /* FOOTER css */
 footer {
   margin-top: auto;
-  background-color:#ffcce5;
+  background-color:#fff;
   color: #000;
   padding: 20px 20px;
   text-align: center;
@@ -439,7 +506,23 @@ footer p {
   font-size: 1.5rem;
 }
 
+@media (min-width: 768px) and (max-width: 991px) {
+
+  .App .home-container .sec-1 {
+    width: 40% !important;
+
+
+  }
+
+}
+
 @media (max-width:767px) {
+  #root h1{
+    font-size: 2.5rem;
+  }
+  .note-list h2{
+    font-size: 1.2rem;
+  }
   .note-list {
     justify-content: center;
   }
@@ -448,6 +531,19 @@ footer p {
     flex-direction: column !important;
     align-items: center;
   }
+  .App .home-container .sec-1 {
+    width: 100% !important;
+    padding: 0;
+    flex-direction: column;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+  }
+  .App .note-container .sec-1 button{
+    align-self: center;
+  }
+  .App .note-container{
+    padding-right: 0;
+  }
 
   .App .add-note {
     align-self: center;
@@ -455,6 +551,6 @@ footer p {
 
   .App .logout-btn {
     right: 9px;
-    top: 57px;
+    top: 38px;
   }
 }

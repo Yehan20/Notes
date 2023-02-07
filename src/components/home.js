@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import { auth as Auth, db } from '../firebase'
 import { getDoc, doc, updateDoc } from 'firebase/firestore'
 import { reducer , defaultState } from '../reducer/taskReducer'
-import { AiFillFileAdd, AiFillCheckSquare, AiFillDelete } from 'react-icons/ai'
+import { AiFillCheckSquare, AiFillDelete } from 'react-icons/ai'
+import {GrNote} from 'react-icons/gr'
 import Loader from './Loader'
 
 
@@ -15,9 +16,10 @@ const context = React.createContext();
 const Home = () => {
   const { user, logout } = useGlobalContext();
   const navigate = useNavigate()
-
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false)
+
+
   const handleClose = () => {
     dispatch({ type: 'RESET' })
     setShow(false);
@@ -45,6 +47,7 @@ const Home = () => {
       let userNote= docData.data().notes;
       setLoading(false)
       dispatch({ type: 'ADD-NOTES', payload: userNote })
+      dispatch({type:'FIND-TOTAL'})
     }
     catch (error) {
       console.log(error);
@@ -56,6 +59,7 @@ const Home = () => {
 
 
   useEffect(() => {
+  
     getNotes()
   }, [state.finish, getNotes, state.done])
 
@@ -71,7 +75,7 @@ const Home = () => {
   }
 
   const handleSave = async () => {
-
+   
     dispatch({ type: 'HANDLE-SAVE' })
     const docRef = doc(db, 'notes', user.email);
     setShow(false)
@@ -104,6 +108,7 @@ const Home = () => {
 
   const deleteNote = async(id)=>{
      dispatch({type:'DELETE-NOTE',payload:id})
+     dispatch({type:'FIND-TOTAL'})
      const newNotes = state.noteList.filter((note,index)=>index!==id)
      const docRef = doc(db, 'notes', user.email);
      try {
@@ -115,21 +120,28 @@ const Home = () => {
     }
     
   }
-  console.log('note list',state.noteList);
+ // console.log('note list',state.noteList);
 
 
   return (
     <context.Provider value={{ handleOne }}>
-      <Container fluid className='note-container'>
-        <Container className='d-flex align-items-start home-container'>
+      <Container fluid className='note-container d-flex home-container '>
+      
+          <div className='sec-1 flex-wrap' >
           <Button variant='danger' className='logout-btn' onClick={handleLogout}>
             Logout
           </Button>
+       
+          <Button className='p-0 add-btn hvr-buzz-out   text-dark' title='Add Note' onClick={() => setShow(!show)}>   <GrNote color={'#fff'}/>   New Note </Button>
+             
+               <div className='keys justify-content-center'>
+                  <h4 className='green'>Completed 1 or More Tasks  </h4>
+                  <h4 className='red'>Completed 0 Tasks</h4>
+                  <h4 className='blue'>Not Completed Note</h4>
+               </div>
 
-          <Button className='p-0 add-btn hvr-buzz-out text-dark add-note' title='Add Note' onClick={() => setShow(!show)}>
-            <AiFillFileAdd className='file' size={300} />
-            New Note
-          </Button>
+          </div>
+
           {
             show && <Modal show={show} onHide={handleClose} className='addModel' >
               <Modal.Header closeButton>
@@ -159,12 +171,20 @@ const Home = () => {
           }
           <div className="note-list">
             {loading && <Loader />}
+            {!loading &&
+              <h2 className='w-100 px-2 text-center'>Note Created : {state.noteList.length} | Tasks Completed : {state.totalTaskAmount}</h2>
+            }
+            {!loading  && state.noteList.length===0 && <h2 className='w-100 text-center no-tasks'>No Tasks Create One</h2>}
             {
               !loading &&  state.noteList.length>0 && state.noteList.map((item, index) => {
                 const not = item.note;
-                const completedTasks = item.completedTasks;
+                const completedTasks2 = Number(item.completedTasks) ;
+               
+     
+                let done = completedTasks2 >-1?true:false;
+        
                 const cmplted = state.noteList2[index].completed
-                return <div className={`note ${cmplted ? 'completed-note' : 'incomplete-note'}`} key={index}>
+                return <div id={`${completedTasks2===0?'zero':''}`} className={`note ${cmplted ? 'completed-note' : 'incomplete-note'}`} key={index}>
                   <AiFillDelete className='delete-btn' onClick={()=>deleteNote(index)} title='Delete Note'/>
                   <h3>{item.date}</h3>
                   <h4>Your Tasks</h4>
@@ -176,18 +196,16 @@ const Home = () => {
                       })
                     }
                   </ol>
-                   <h5>Tasks Completed : {completedTasks}</h5>
-                  {!cmplted && <Form.Control type='number' min='1'  defaultValue={0} onFocus={(e) => dispatch({ type: 'FINALIZE', payload: {index:index,count:e.target.value} })} onChange={(e) => dispatch({ type: 'FINALIZE', payload: {index:index,count:e.target.value} })} placeholder='Completed task amounts' max={item.note.length} />}
-
-                  <Button className={`mt-2 ${cmplted?'px-0':'px-2'}`} disabled={cmplted} onClick={(e) => finalizeNote(e)}>{cmplted ? <><AiFillCheckSquare size={30}  />Task Completed</>: 'Mark Tasks Completed'}</Button>
+                   <h5>Tasks Completed : {completedTasks2===0||completedTasks2===-1?'None':completedTasks2}</h5>
+                  {!cmplted && <Form.Control type='number' min={0}  defaultValue={0} onFocus={(e) => dispatch({ type: 'FINALIZE', payload: {index:index,count:e.target.value  } })} onChange={(e) => dispatch({ type: 'FINALIZE', payload: {index:index,count:e.target.value} })} placeholder='Completed task amounts' max={item.note.length} />}
+                
+                  {done &&  <Button className={`mt-2 ${cmplted?'px-0':'px-2'}`} disabled={cmplted} onClick={(e) => finalizeNote(e)}>{cmplted ? <><AiFillCheckSquare size={30}  /> Note Complete</>: 'Mark Tasks Completed'}</Button>} 
                 </div>
               })
             }
 
           </div>
 
-
-        </Container>
       </Container>
     </context.Provider>
   )
